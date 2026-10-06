@@ -1,0 +1,536 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta property="og:title" content="Para mi gordita">
+<meta property="og:description" content="Tengo algo para preguntarte">
+<style>*,*::before,*::after{box-sizing:border-box}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Nuestros 4 meses</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@500;600;700&display=swap">
+<style>
+/* Layout: a postcard from Hawaii on a pale lagoon; Stitch y Angel react above the question; the No escapes. Single deliberate look. */
+:root {
+  --bg: #bfeaf3;
+  --bg-dot: rgba(27,42,92,.08);
+  --paper: #fffaf3;
+  --ink: #1b2a5c;
+  --ink-soft: #55608a;
+  --yes: #ff4f8b;
+  --yes-ink: #ffffff;
+  --no: #e6eef2;
+  --stitch: #4f86dd;
+  --stitch-light: #a9cdf7;
+  --angel: #ff8fc2;
+  --angel-light: #ffd3e6;
+  --leaf: #2fa37a;
+  --display: "Fredoka", "Arial Rounded MT Bold", system-ui, sans-serif;
+  --hand: "Nunito", "Segoe UI", system-ui, sans-serif;
+  --g: 1;
+  color-scheme: light;
+}
+html, body { height: 100%; }
+body {
+  background: var(--bg);
+  background-image: radial-gradient(var(--bg-dot) 1.2px, transparent 1.2px);
+  background-size: 18px 18px;
+  color: var(--ink);
+  font-family: var(--hand);
+  padding-inline: 16px;
+  overflow-x: hidden;
+}
+.wrap { min-height: 100%; display: grid; place-items: center; padding-block: 28px; }
+.card {
+  position: relative;
+  width: 100%; max-width: 440px;
+  background: var(--paper);
+  border: 3px solid var(--ink);
+  border-radius: 26px;
+  box-shadow: 8px 8px 0 var(--ink);
+  padding: 30px 22px 26px;
+  display: flex; flex-direction: column; align-items: center; gap: 14px;
+  text-align: center;
+}
+.stamp {
+  position: absolute; top: -16px; right: 18px;
+  background: var(--yes); color: #fff;
+  border: 3px solid var(--ink); border-radius: 999px;
+  font-family: var(--display); font-weight: 700; font-size: .85rem; letter-spacing: .04em;
+  padding: 5px 12px; transform: rotate(6deg);
+}
+.flower {
+  position: absolute; top: -18px; left: 16px;
+  width: 44px; height: 44px; transform: rotate(-12deg);
+}
+.scene {
+  width: 240px; max-width: 100%;
+  aspect-ratio: 16 / 10;
+  border-radius: 20px;
+  border: 3px solid var(--ink);
+  background: linear-gradient(#ffe7b8 0 62%, #f7d58f 62%);
+  overflow: hidden;
+  display: grid; place-items: center;
+}
+.scene svg { width: 100%; height: 100%; }
+h1 {
+  font-family: var(--display); font-weight: 700;
+  font-size: clamp(2.1rem, 9vw, 2.7rem);
+  line-height: 1.02; letter-spacing: -0.01em;
+  margin: 0; text-wrap: balance;
+}
+.msg { font-size: 1.15rem; line-height: 1.4; font-weight: 600; margin: 0; max-width: 30ch; text-wrap: balance; }
+.ask { font-family: var(--display); font-weight: 500; font-size: 1.25rem; margin: 4px 0 0; }
+.buttons {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: center;
+  gap: 14px; min-height: 64px; width: 100%;
+}
+button {
+  font-family: var(--display); font-weight: 700;
+  border: 3px solid var(--ink); border-radius: 999px;
+  cursor: pointer;
+  box-shadow: 4px 4px 0 var(--ink);
+  transition: transform .12s ease, box-shadow .12s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+button:focus-visible, .send:focus-visible, input:focus-visible { outline: 3px dashed var(--yes); outline-offset: 4px; }
+button:active { transform: translate(3px,3px); box-shadow: 1px 1px 0 var(--ink); }
+#yes {
+  background: var(--yes); color: var(--yes-ink);
+  font-size: calc(1.15rem * var(--g));
+  padding: calc(.6rem * var(--g)) calc(1.3rem * var(--g));
+  transition: font-size .25s cubic-bezier(.3,1.6,.5,1), padding .25s cubic-bezier(.3,1.6,.5,1);
+  animation: pulse 1.6s ease-in-out infinite;
+}
+#no { background: var(--no); color: var(--ink); font-size: 1rem; padding: .55rem 1.1rem; touch-action: none; }
+#no.runaway { position: fixed; z-index: 50; transition: left .18s ease-out, top .18s ease-out; }
+@keyframes pulse { 50% { box-shadow: 4px 4px 0 var(--ink), 0 0 0 8px rgba(255,79,139,.2); } }
+@keyframes wobble { 0%,100% { transform: rotate(0) } 25% { transform: rotate(-5deg) } 75% { transform: rotate(5deg) } }
+.wobble { animation: wobble .35s ease-in-out 2; }
+
+.polaroid {
+  position: relative; margin: 6px 0 4px;
+  background: #fff; border: 3px solid var(--ink);
+  padding: 10px 10px 0; box-shadow: 5px 5px 0 var(--ink);
+  width: min(300px, 100%); transform: rotate(-2deg);
+  display: flex; flex-direction: column; align-items: center;
+}
+.polaroid img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; display: block; border: 2px solid var(--ink); }
+.polaroid figcaption { font-family: var(--display); font-size: 1.1rem; font-weight: 600; padding: 6px 0 8px; }
+
+.pick { width: 100%; display: flex; flex-direction: column; gap: 12px; }
+.step {
+  margin: 6px 0 0; text-align: left;
+  font-family: var(--display); font-weight: 700; font-size: .85rem;
+  letter-spacing: .06em; text-transform: uppercase;
+}
+.opts { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; width: 100%; }
+.opt {
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+  padding: 12px 8px; border-radius: 18px;
+  background: #fff; color: var(--ink); font-size: 1rem; font-weight: 600;
+}
+.opt .ic { font-size: 1.9rem; line-height: 1; }
+.opt:nth-child(3n+1) { background: #d8ecff; }
+.opt:nth-child(3n+2) { background: #ffe1ee; }
+.opt:nth-child(3n) { background: #dff5e8; }
+.opt[aria-checked="true"], .chip[aria-checked="true"] {
+  background: var(--yes); color: var(--yes-ink);
+  transform: translate(-2px,-2px); box-shadow: 6px 6px 0 var(--ink);
+}
+.custom { width: 100%; display: flex; flex-direction: column; gap: 6px; text-align: left; }
+.custom label, .other-hour { font-size: 1rem; font-weight: 600; }
+.custom input, .other-hour input {
+  width: 100%; min-width: 0;
+  font-family: var(--hand); font-size: 1.05rem; font-weight: 600;
+  padding: 10px 12px;
+  border: 3px solid var(--ink); border-radius: 14px;
+  background: #fff; color: var(--ink);
+}
+.other-hour { display: flex; flex-direction: column; gap: 4px; text-align: left; }
+.other-hour input { font-family: var(--display); font-size: 1rem; padding: 10px; }
+.chips { display: flex; gap: 8px; }
+.chips.days { overflow-x: auto; scroll-snap-type: x proximity; padding: 4px 6px 10px 2px; scrollbar-width: thin; }
+.chips.hours { flex-wrap: wrap; }
+.chip {
+  flex: none;
+  display: flex; flex-direction: column; align-items: center;
+  min-width: 64px; padding: 8px 10px; border-radius: 14px;
+  background: #fff; color: var(--ink);
+  box-shadow: 3px 3px 0 var(--ink);
+  scroll-snap-align: start;
+}
+.chip strong { font-size: 1rem; text-transform: capitalize; }
+.chip small { font-family: var(--hand); font-size: 1rem; font-weight: 400; color: var(--ink-soft); }
+.chip[aria-checked="true"] small { color: var(--yes-ink); }
+.send {
+  display: block; margin-top: 6px;
+  font-family: var(--display); font-weight: 700; font-size: 1.15rem;
+  text-align: center; text-decoration: none;
+  padding: 14px 18px;
+  border: 3px solid var(--ink); border-radius: 999px;
+  background: #25d366; color: var(--ink);
+  box-shadow: 4px 4px 0 var(--ink);
+}
+.send[aria-disabled="true"] { opacity: .4; pointer-events: none; }
+.hint { margin: 0; font-size: .95rem; font-weight: 600; color: var(--ink-soft); }
+.foot { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.15rem; color: var(--yes); }
+.when-fixed { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1rem; background: #fff1f6; border: 2px dashed var(--yes); border-radius: 14px; padding: 8px 14px; }
+canvas#confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 60; }
+@media (prefers-reduced-motion: reduce) {
+  #yes { animation: none; transition: none; }
+  #no.runaway { transition: none; }
+  .wobble { animation: none; }
+}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="hibiscus" viewBox="0 0 40 40">
+    <g stroke="#1b2a5c" stroke-width="2">
+      <circle cx="20" cy="9" r="8" fill="#ff4f8b"/><circle cx="30" cy="17" r="8" fill="#ff4f8b"/>
+      <circle cx="26" cy="29" r="8" fill="#ff4f8b"/><circle cx="13" cy="29" r="8" fill="#ff4f8b"/>
+      <circle cx="10" cy="17" r="8" fill="#ff4f8b"/><circle cx="20" cy="20" r="5" fill="#ffd34f"/>
+    </g>
+  </symbol>
+</svg>
+
+<div class="wrap">
+  <!-- PANTALLA 1: la pregunta -->
+  <section class="card" id="ask">
+    <svg class="flower" aria-hidden="true"><use href="#hibiscus"/></svg>
+    <span class="stamp">4 meses</span>
+    <div class="scene" id="scene"></div>
+    <h1 id="title">Hola mi gordita</h1>
+    <p class="msg" id="msg">El miércoles cumplimos cuatro meses juntos.</p>
+    <figure class="polaroid" id="photoAsk" hidden>
+      <img id="photoAskImg" alt="Nosotros">
+      <figcaption id="photoAskCap">mirá qué lindos somos…</figcaption>
+    </figure>
+    <p class="ask">¿Querés ir a comer conmigo mañana para festejarlo?</p>
+    <div class="buttons">
+      <button id="yes" type="button">Sí, obvio</button>
+      <button id="no" type="button">No</button>
+    </div>
+  </section>
+
+  <!-- PANTALLA 2: elegir dónde -->
+  <section class="card" id="plan" hidden>
+    <svg class="flower" aria-hidden="true"><use href="#hibiscus"/></svg>
+    <span class="stamp">4 meses</span>
+    <figure class="polaroid" id="photoYes" hidden>
+      <img id="photoYesImg" alt="Nosotros">
+      <figcaption>vos y yo, siempre</figcaption>
+    </figure>
+    <div class="scene" id="scene2"></div>
+    <h1>¡Sabía que ibas a decir que sí!</h1>
+    <p class="msg">Esta vez elegís vos: el lugar y el horario. Me llega a WhatsApp.</p>
+    <form class="pick" id="pickForm">
+      <p class="when-fixed">🌺 Martes 6 de octubre</p>
+      <p class="step">1 · ¿Dónde cenamos?</p>
+      <div class="opts" role="radiogroup" aria-label="Dónde cenamos">
+        <button type="button" class="opt" role="radio" aria-checked="false" data-plan="en un lugar de sushi"><span class="ic">🍣</span>Sushi</button>
+        <button type="button" class="opt" role="radio" aria-checked="false" data-plan="en un lugar de pastas"><span class="ic">🍝</span>Pastas</button>
+        <button type="button" class="opt" role="radio" aria-checked="false" data-plan="en una parrilla"><span class="ic">🥩</span>Parrilla</button>
+        <button type="button" class="opt" role="radio" aria-checked="false" data-plan="en una hamburguesería"><span class="ic">🍔</span>Hamburguesas</button>
+        <button type="button" class="opt" role="radio" aria-checked="false" data-plan="en una pizzería"><span class="ic">🍕</span>Pizza</button>
+        <button type="button" class="opt" role="radio" aria-checked="false" data-plan="donde vos quieras, sorprendeme"><span class="ic">💝</span>Sorprendeme</button>
+      </div>
+      <div class="custom">
+        <label for="customPlan">¿Tenés un lugar en mente? Escribilo:</label>
+        <input id="customPlan" type="text" placeholder="el nombre del lugar…" autocomplete="off">
+      </div>
+      <p class="step">2 · ¿A qué hora?</p>
+      <div class="chips hours" id="hours" role="radiogroup" aria-label="Horario"></div>
+      <label class="other-hour" id="otherHourWrap" for="otherHour" hidden>Elegí la hora<input id="otherHour" type="time" step="900"></label>
+      <a class="send" id="send" target="_blank" rel="noopener" aria-disabled="true">Mandar por WhatsApp</a>
+      <p class="hint" id="hint">Elegí el lugar y el horario.</p>
+    </form>
+    <p class="foot">Te amo. Feliz 4 meses.</p>
+  </section>
+</div>
+<canvas id="confetti" hidden></canvas>
+
+<script>
+// ===== CONFIGURACIÓN =====
+const WHATSAPP = "5491161587146";
+// Fotos opcionales (data URI o URL). Si quedan vacías, no se muestran.
+const PHOTO_ASK = "__PHOTO_ASK__";
+const PHOTO_YES = "__PHOTO_YES__";
+// =========================
+
+const INK = "#1b2a5c";
+
+// Ojos y boca según el humor
+function features(cx, cy, mood, lashes) {
+  const L = cx - 11, R = cx + 11, ey = cy - 5;
+  let eyes, mouth, extra = "";
+  const bigEye = (x) => `<ellipse cx="${x}" cy="${ey}" rx="6.5" ry="8" fill="${INK}" stroke="none"/><circle cx="${x+2.4}" cy="${ey-3}" r="2.4" fill="#fff" stroke="none"/>`;
+  switch (mood) {
+    case "happy":
+      eyes = `<path d="M${L-5} ${ey+2} q5 -8 10 0 M${R-5} ${ey+2} q5 -8 10 0" fill="none" stroke-width="3.2"/>`;
+      mouth = `<path d="M${cx-9} ${cy+11} q9 9 18 0" fill="#ff7aa8" stroke-width="2.5"/>`;
+      break;
+    case "sad":
+    case "crying":
+      eyes = bigEye(L) + bigEye(R) + `<path d="M${L-7} ${ey-12} l9 4 M${R+7} ${ey-12} l-9 4" stroke-width="2.6"/>`;
+      mouth = `<path d="M${cx-7} ${cy+15} q7 -7 14 0" fill="none" stroke-width="2.6"/>`;
+      if (mood === "crying") extra = `<path d="M${L} ${ey+7} q-5 9 0 12 q5 -3 0 -12Z M${R} ${ey+7} q-5 9 0 12 q5 -3 0 -12Z" fill="#5ab8ff" stroke="none"/>`;
+      break;
+    case "shock":
+      eyes = bigEye(L) + bigEye(R);
+      mouth = `<ellipse cx="${cx}" cy="${cy+13}" rx="4.5" ry="5.5" fill="${INK}" stroke="none"/>`;
+      break;
+    case "smug":
+      eyes = `<path d="M${L-6} ${ey} h12 M${R-6} ${ey} h12" stroke-width="3.2"/>`;
+      mouth = `<path d="M${cx-8} ${cy+11} q9 6 15 -4" fill="none" stroke-width="2.6"/>`;
+      break;
+    default: // hopeful
+      eyes = bigEye(L) + bigEye(R);
+      mouth = `<path d="M${cx-7} ${cy+12} q3.5 4 7 0 q3.5 4 7 0" fill="none" stroke-width="2.5"/>`;
+  }
+  const lash = lashes ? `<path d="M${L-7} ${ey-6} l-4 -3 M${R+7} ${ey-6} l4 -3" stroke-width="2"/>` : "";
+  const blush = (mood === "happy" || mood === "hopeful" || mood === "smug")
+    ? `<ellipse cx="${cx-20}" cy="${cy+7}" rx="4.5" ry="3" fill="#ff4f8b" stroke="none" opacity=".45"/><ellipse cx="${cx+20}" cy="${cy+7}" rx="4.5" ry="3" fill="#ff4f8b" stroke="none" opacity=".45"/>` : "";
+  return eyes + lash + mouth + blush + extra;
+}
+
+// Bichito azul de orejas grandes (tipo Stitch)
+function blueAlien(cx, cy, mood, tilt) {
+  const droop = (mood === "sad" || mood === "crying") ? 14 : 0;
+  return `<g transform="rotate(${tilt} ${cx} ${cy})">
+    <path d="M${cx-18} ${cy-12} Q${cx-52} ${cy-38+droop} ${cx-50} ${cy-6+droop} Q${cx-40} ${cy+6} ${cx-20} ${cy+2}Z" fill="#4f86dd" stroke-width="3" stroke-linejoin="round"/>
+    <path d="M${cx+18} ${cy-12} Q${cx+52} ${cy-38+droop} ${cx+50} ${cy-6+droop} Q${cx+40} ${cy+6} ${cx+20} ${cy+2}Z" fill="#4f86dd" stroke-width="3" stroke-linejoin="round"/>
+    <path d="M${cx-22} ${cy-8} Q${cx-44} ${cy-26+droop} ${cx-43} ${cy-6+droop} Q${cx-36} ${cy} ${cx-23} ${cy-1}Z" fill="#f4a3c4" stroke="none"/>
+    <path d="M${cx+22} ${cy-8} Q${cx+44} ${cy-26+droop} ${cx+43} ${cy-6+droop} Q${cx+36} ${cy} ${cx+23} ${cy-1}Z" fill="#f4a3c4" stroke="none"/>
+    <ellipse cx="${cx}" cy="${cy}" rx="27" ry="23" fill="#4f86dd" stroke-width="3"/>
+    <ellipse cx="${cx}" cy="${cy+9}" rx="15" ry="10" fill="#a9cdf7" stroke="none"/>
+    <ellipse cx="${cx}" cy="${cy+3}" rx="7" ry="4.5" fill="${INK}" stroke="none"/>
+    ${features(cx, cy, mood, false)}
+  </g>`;
+}
+// Bichita rosa con antenas (Sticha)
+function pinkAlien(cx, cy, mood, tilt) {
+  const droop = (mood === "sad" || mood === "crying") ? 10 : 0;
+  return `<g transform="rotate(${tilt} ${cx} ${cy})">
+    <path d="M${cx-6} ${cy-21} Q${cx-10} ${cy-44+droop} ${cx+14} ${cy-46+droop} Q${cx+30} ${cy-44+droop} ${cx+26} ${cy-32+droop}" fill="none" stroke-width="3.5"/>
+    <path d="M${cx+6} ${cy-21} Q${cx+8} ${cy-38+droop} ${cx+26} ${cy-38+droop} Q${cx+38} ${cy-36+droop} ${cx+34} ${cy-26+droop}" fill="none" stroke-width="3.5"/>
+    <circle cx="${cx+26}" cy="${cy-30+droop}" r="3.5" fill="#ff8fc2" stroke-width="2.2"/>
+    <circle cx="${cx+34}" cy="${cy-24+droop}" r="3.5" fill="#ff8fc2" stroke-width="2.2"/>
+    <path d="M${cx-20} ${cy-10} Q${cx-40} ${cy-4+droop} ${cx-36} ${cy+16} Q${cx-26} ${cy+12} ${cx-21} ${cy+4}Z" fill="#ff8fc2" stroke-width="3" stroke-linejoin="round"/>
+    <path d="M${cx+20} ${cy-10} Q${cx+40} ${cy-4+droop} ${cx+36} ${cy+16} Q${cx+26} ${cy+12} ${cx+21} ${cy+4}Z" fill="#ff8fc2" stroke-width="3" stroke-linejoin="round"/>
+    <ellipse cx="${cx}" cy="${cy}" rx="25" ry="22" fill="#ff8fc2" stroke-width="3"/>
+    <ellipse cx="${cx}" cy="${cy+9}" rx="14" ry="9.5" fill="#ffd3e6" stroke="none"/>
+    <ellipse cx="${cx}" cy="${cy+3}" rx="5.5" ry="3.5" fill="#c2306b" stroke="none"/>
+    ${features(cx, cy, mood, true)}
+  </g>`;
+}
+function heart(x, y, s, broken) {
+  const h = `<path d="M${x} ${y+9*s} C${x-14*s} ${y-1*s} ${x-9*s} ${y-12*s} ${x} ${y-5*s} C${x+9*s} ${y-12*s} ${x+14*s} ${y-1*s} ${x} ${y+9*s}Z" fill="#ff4f8b" stroke-width="2.5"/>`;
+  return broken ? h + `<path d="M${x} ${y-5*s} l-3 5 l4 3 l-3 6" fill="none" stroke="#fff" stroke-width="2.5"/>` : h;
+}
+function couple(mood) {
+  const sad = mood === "sad" || mood === "crying";
+  const gap = sad ? 8 : 0;
+  let hearts;
+  if (sad) hearts = heart(80, 20, 1.2, true);
+  else if (mood === "happy") hearts = heart(80, 16, 1.3) + heart(58, 10, .65) + heart(104, 9, .75);
+  else if (mood === "shock") hearts = heart(80, 20, .8);
+  else hearts = heart(80, 18, 1.1);
+  return `<svg viewBox="0 0 160 100" aria-hidden="true"><g stroke="${INK}" stroke-linecap="round" fill="${INK}">
+    ${hearts}
+    ${blueAlien(48 - gap, 70, mood, sad ? -7 : 7)}
+    ${pinkAlien(112 + gap, 70, mood, sad ? 7 : -7)}
+  </g></svg>`;
+}
+function setScene(el, mood) { el.innerHTML = couple(mood); }
+
+const $ = id => document.getElementById(id);
+const yes = $("yes"), no = $("no"), scene = $("scene");
+const title = $("title"), msg = $("msg");
+
+function usePhoto(src, fig, img) {
+  if (!src || src.startsWith("__")) return false;
+  img.src = src; fig.hidden = false; return true;
+}
+
+// Lo que pasa cada vez que intenta el No
+const steps = [
+  { t: "¿Por qué ponés que no? ¿Me odiás?", m: "Stitch no lo puede creer.", f: "sad" },
+  { t: "¿En serio, gordita?", m: "Sticha se puso a llorar. Mirá lo que hiciste.", f: "crying" },
+];
+const runawayLines = [
+  ["¿A dónde vas?", "Ese botón se fue a otra galaxia."],
+  ["Casi", "El Sí te está esperando."],
+  ["Gordita…", "Mirá qué grande está el Sí, es una señal."],
+  ["Imposible", "Stitch rompió el botón No."],
+  ["Dale", "Ya sé que te estás riendo."],
+  ["Última chance", "(mentira, el No nunca va a funcionar)"],
+];
+const runawayFaces = ["shock", "smug", "hopeful", "smug", "happy", "hopeful"];
+
+let attempts = 0, runaway = false;
+
+function grow() {
+  document.documentElement.style.setProperty("--g", Math.min(1 + attempts * 0.22, 2.6));
+}
+function wobble(el) { el.classList.remove("wobble"); void el.offsetWidth; el.classList.add("wobble"); }
+
+no.addEventListener("click", e => {
+  if (runaway) { e.preventDefault(); return; }
+  const s = steps[attempts];
+  attempts++;
+  title.textContent = s.t;
+  msg.textContent = s.m;
+  setScene(scene, s.f);
+  wobble(scene);
+  grow();
+  if (attempts >= steps.length) runaway = true;
+});
+
+function flee(px, py) {
+  attempts++;
+  grow();
+  const i = (attempts - steps.length - 1) % runawayLines.length;
+  title.textContent = runawayLines[i][0];
+  msg.textContent = runawayLines[i][1];
+  setScene(scene, runawayFaces[i]);
+
+  const r = no.getBoundingClientRect();
+  if (!no.classList.contains("runaway")) {
+    no.style.left = r.left + "px"; no.style.top = r.top + "px";
+    no.classList.add("runaway"); void no.offsetWidth;
+  }
+  const pad = 16;
+  const maxX = window.innerWidth - r.width - pad;
+  const maxY = window.innerHeight - r.height - pad;
+  const y = yes.getBoundingClientRect();
+  let x, top, tries = 0;
+  do {
+    x = pad + Math.random() * Math.max(0, maxX - pad);
+    top = pad + Math.random() * Math.max(0, maxY - pad);
+    tries++;
+  } while (tries < 40 && (
+    Math.hypot(x + r.width / 2 - px, top + r.height / 2 - py) < 160 ||
+    (x < y.right + 10 && x + r.width > y.left - 10 && top < y.bottom + 10 && top + r.height > y.top - 10)
+  ));
+  no.style.left = x + "px"; no.style.top = top + "px";
+}
+// Compu: se escapa cuando el mouse se acerca
+no.addEventListener("pointerenter", e => { if (runaway && e.pointerType === "mouse") flee(e.clientX, e.clientY); });
+// Celular: se escapa apenas lo toca
+no.addEventListener("pointerdown", e => { if (!runaway) return; e.preventDefault(); flee(e.clientX, e.clientY); });
+no.addEventListener("touchstart", e => { if (runaway) e.preventDefault(); }, { passive: false });
+no.addEventListener("keydown", e => {
+  if (runaway && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); const r = no.getBoundingClientRect(); flee(r.left, r.top); }
+});
+window.addEventListener("resize", () => {
+  if (!no.classList.contains("runaway")) return;
+  const r = no.getBoundingClientRect();
+  no.style.left = Math.min(r.left, window.innerWidth - r.width - 16) + "px";
+  no.style.top = Math.min(r.top, window.innerHeight - r.height - 16) + "px";
+});
+
+// ===== SÍ =====
+function waLink(plan) {
+  const text = "Hola gordito, sí, quiero cenar con vos " + plan + ". Te amo.";
+  return "https://wa.me/" + WHATSAPP + "?text=" + encodeURIComponent(text);
+}
+
+yes.addEventListener("click", () => {
+  no.remove();
+  $("ask").hidden = true;
+  $("plan").hidden = false;
+  setScene($("scene2"), "happy");
+  confetti();
+  window.scrollTo({ top: 0 });
+});
+
+const opts = document.querySelectorAll("#plan .opts .opt");
+const customPlan = $("customPlan"), send = $("send"), hint = $("hint");
+let chosen = "", chosenHour = "";
+const otherHour = $("otherHour"), otherHourWrap = $("otherHourWrap");
+
+function chip(group, label, onPick) {
+  const b = document.createElement("button");
+  b.type = "button"; b.className = "chip"; b.setAttribute("role", "radio"); b.setAttribute("aria-checked", "false");
+  b.innerHTML = "<strong>" + label + "</strong>";
+  b.addEventListener("click", () => {
+    group.querySelectorAll(".chip").forEach(c => c.setAttribute("aria-checked", c === b ? "true" : "false"));
+    onPick();
+    refresh();
+  });
+  group.appendChild(b);
+}
+const hoursEl = $("hours");
+["20:00", "20:30", "21:00", "21:30", "22:00"].forEach(hh => chip(hoursEl, hh, () => { chosenHour = hh; otherHourWrap.hidden = true; }));
+chip(hoursEl, "Otra", () => { otherHourWrap.hidden = false; chosenHour = otherHour.value; otherHour.focus(); });
+otherHour.addEventListener("input", () => { chosenHour = otherHour.value; refresh(); });
+
+function selectOpt(btn) { opts.forEach(o => o.setAttribute("aria-checked", o === btn ? "true" : "false")); }
+opts.forEach(btn => btn.addEventListener("click", () => {
+  chosen = btn.dataset.plan; customPlan.value = ""; selectOpt(btn); refresh();
+}));
+customPlan.addEventListener("input", () => {
+  const v = customPlan.value.trim();
+  chosen = v ? "en " + v : "";
+  selectOpt(null); refresh();
+});
+
+function refresh() {
+  const missing = [];
+  if (!chosen) missing.push("el lugar");
+  if (!chosenHour) missing.push("el horario");
+  if (missing.length) {
+    send.setAttribute("aria-disabled", "true");
+    send.removeAttribute("href");
+    hint.textContent = "Falta elegir " + missing.join(" y ") + ".";
+  } else {
+    send.setAttribute("aria-disabled", "false");
+    send.href = waLink(chosen + ", a las " + chosenHour);
+    hint.textContent = "Te va a abrir WhatsApp con el mensaje listo. Solo tocá enviar.";
+  }
+}
+$("pickForm").addEventListener("submit", e => { e.preventDefault(); if (send.href) send.click(); });
+
+// ===== Lluvia de corazones =====
+function confetti() {
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const c = $("confetti"); c.hidden = false;
+  const ctx = c.getContext("2d");
+  const dpr = window.devicePixelRatio || 1;
+  c.width = innerWidth * dpr; c.height = innerHeight * dpr; ctx.scale(dpr, dpr);
+  const colors = ["#ff4f8b", "#ff8fc2", "#4f86dd", "#a9cdf7", "#ffd34f"];
+  const parts = Array.from({ length: 140 }, () => ({
+    x: innerWidth / 2, y: innerHeight * 0.35,
+    vx: (Math.random() - .5) * 14, vy: -Math.random() * 14 - 4,
+    s: 7 + Math.random() * 7, r: Math.random() * 6, vr: (Math.random() - .5) * .2,
+    c: colors[Math.floor(Math.random() * colors.length)]
+  }));
+  function drawHeart(s) {
+    ctx.beginPath();
+    ctx.moveTo(0, s * .35);
+    ctx.bezierCurveTo(-s, -s * .3, -s * .45, -s, 0, -s * .45);
+    ctx.bezierCurveTo(s * .45, -s, s, -s * .3, 0, s * .35);
+    ctx.fill();
+  }
+  let frame = 0;
+  (function tick() {
+    ctx.clearRect(0, 0, innerWidth, innerHeight);
+    parts.forEach(p => {
+      p.vy += .3; p.vx *= .99; p.x += p.vx; p.y += p.vy; p.r += p.vr;
+      ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.r);
+      ctx.fillStyle = p.c; drawHeart(p.s); ctx.restore();
+    });
+    if (++frame < 240) requestAnimationFrame(tick); else c.hidden = true;
+  })();
+}
+
+usePhoto(PHOTO_ASK, $("photoAsk"), $("photoAskImg"));
+usePhoto(PHOTO_YES, $("photoYes"), $("photoYesImg"));
+setScene(scene, "hopeful");
+</script>
+</body>
+</html>
